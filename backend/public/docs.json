@@ -1,0 +1,319 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Laravel Shop API",
+    "version": "1.0.0",
+    "description": "API dla sklepu internetowego"
+  },
+  "paths": {
+    "/api/login": {
+      "post": {
+        "summary": "Logowanie użytkownika",
+        "tags": ["Autoryzacja"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "example": "user@example.com" },
+                  "password": { "type": "string", "example": "secret" }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Udane logowanie" },
+          "401": { "description": "Nieprawidłowe dane logowania" }
+        }
+      }
+    },
+    "/api/register": {
+      "post": {
+        "summary": "Rejestracja użytkownika",
+        "tags": ["Autoryzacja"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example": "Jan" },
+                  "email": { "type": "string", "example": "ivan@example.com" },
+                  "password": { "type": "string", "example": "123456" }
+                },
+                "required": ["name", "email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Udana rejestracja" }
+        }
+      }
+    },
+    "/api/goods": {
+      "get": {
+        "summary": "Pobierz wszystkie produkty",
+        "tags": ["Produkty i kategorie"],
+        "responses": {
+          "200": { "description": "Lista produktów" }
+        }
+      }
+    },
+    "/api/goods/{good}": {
+      "get": {
+        "summary": "Pobierz produkt po ID",
+        "tags": ["Produkty i kategorie"],
+        "parameters": [
+          {
+            "name": "good",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Informacje o produkcie" },
+          "404": { "description": "Produkt nie znaleziony" }
+        }
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "summary": "Pobierz listę kategorii",
+        "tags": ["Produkty i kategorie"],
+        "responses": {
+          "200": { "description": "Lista kategorii" }
+        }
+      }
+    },
+    "/api/categories/{category}": {
+      "get": {
+        "summary": "Pobierz produkty po kategorii",
+        "tags": ["Produkty i kategorie"],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Produkty w kategorii" }
+        }
+      }
+    },
+    "/api/logout": {
+      "post": {
+        "summary": "Wylogowanie użytkownika",
+        "tags": ["Autoryzacja"],
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Wylogowanie zakończone" }
+        }
+      }
+    },
+    "/api/user": {
+      "get": {
+        "summary": "Pobierz aktualnego użytkownika",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Dane użytkownika" }
+        }
+      },
+      "put": {
+        "summary": "Zaktualizuj dane użytkownika",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string" }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Dane zaktualizowane" }
+          }
+        }
+      }
+    },
+    "/api/user/orders": {
+      "get": {
+        "summary": "Pobierz zamówienia użytkownika",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Lista zamówień" }
+        }
+      },
+      "post": {
+        "summary": "Utwórz nowe zamówienie",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "goods": { "type": "array", "items": { "type": "integer" } },
+                  "address": { "type": "string" }
+                },
+                "required": ["goods", "address"]
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Zamówienie utworzone" }
+          }
+        }
+      }
+    },
+    "/api/user/orders/{order}": {
+      "get": {
+        "summary": "Pobierz zamówienie po ID",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          {
+            "name": "order",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Informacje o zamówieniu" },
+          "404": { "description": "Zamówienie nie znalezione" }
+        }
+      },
+      "put": {
+        "summary": "Zaktualizuj zamówienie",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          {
+            "name": "order",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Zamówienie zaktualizowane" },
+          "404": { "description": "Zamówienie nie znalezione" }
+        }
+      },
+      "delete": {
+        "summary": "Usuń zamówienie",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          {
+            "name": "order",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Zamówienie usunięte" },
+          "404": { "description": "Zamówienie nie znalezione" }
+        }
+      }
+    },
+    "/api/user/cart": {
+      "get": {
+        "summary": "Pobierz koszyk użytkownika",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "responses": {
+          "200": { "description": "Koszyk użytkownika" }
+        }
+      },
+      "post": {
+        "summary": "Dodaj produkt do koszyka",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "good_id": { "type": "integer" },
+                  "quantity": { "type": "integer" }
+                },
+                "required": ["good_id", "quantity"]
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "Produkt dodany do koszyka" }
+          }
+        }
+      }
+    },
+    "/api/user/cart/{cart_item}": {
+      "put": {
+        "summary": "Zaktualizuj produkt w koszyku",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          {
+            "name": "cart_item",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Produkt zaktualizowany w koszyku" },
+          "404": { "description": "Produkt nie znaleziony w koszyku" }
+        }
+      },
+      "delete": {
+        "summary": "Usuń produkt z koszyka",
+        "tags": ["Użytkownik"],
+        "security": [{ "sanctum": [] }],
+        "parameters": [
+          {
+            "name": "cart_item",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Produkt usunięty z koszyka" },
+          "404": { "description": "Produkt nie znaleziony w koszyku" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sanctum": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "XSRF-TOKEN"
+      }
+    }
+  }
+}

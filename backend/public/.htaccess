@@ -23,3 +23,8 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<FilesMatch "docs.json">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
